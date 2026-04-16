@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>國民外交官測驗｜英語韌性課 × 敏迪選讀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',sans-serif;background:#f8f7f4;color:#1a1a1a;min-height:100vh;padding:2rem 1rem 4rem}
+.qw{max-width:660px;margin:0 auto}
+.qhdr{text-align:center;margin-bottom:2.5rem}
+.badge{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#0C447C;background:#E6F1FB;border:.5px solid #B5D4F4;border-radius:20px;padding:4px 14px;margin-bottom:1rem}
+.qhdr h1{font-family:'Noto Serif TC',serif;font-size:26px;font-weight:600;line-height:1.4;margin-bottom:.5rem;color:#1a1a1a}
+.qhdr p{font-size:14px;color:#5f5e5a;line-height:1.7}
+.prog-wrap{margin-bottom:2rem}
+.prog-meta{display:flex;justify-content:space-between;font-size:12px;color:#888780;margin-bottom:6px}
+.prog-track{height:3px;background:#e0ddd6;border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:#185FA5;border-radius:2px;transition:width .4s ease}
+.qcard{background:#fff;border:.5px solid #dddbd4;border-radius:12px;padding:1.5rem;margin-bottom:1.25rem}
+.qtag{font-size:11px;letter-spacing:.1em;color:#888780;text-transform:uppercase;margin-bottom:.75rem}
+.qtext{font-size:15px;font-weight:500;line-height:1.7;margin-bottom:1.25rem;color:#1a1a1a}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:block;width:100%;text-align:left;background:#f4f2ee;border:.5px solid #dddbd4;border-radius:8px;padding:.75rem 1rem;font-size:14px;font-family:'Noto Sans TC',sans-serif;color:#1a1a1a;cursor:pointer;transition:border-color .2s,background .2s;line-height:1.6}
+.opt:hover{border-color:#b4b2a9;background:#fff}
+.opt.sel{border-color:#185FA5;background:#E6F1FB;color:#0C447C}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
+.hint{font-size:12px;color:#888780}
+.btn-next{background:#185FA5;color:#E6F1FB;border:none;border-radius:8px;padding:.65rem 1.5rem;font-size:14px;font-family:'Noto Sans TC',sans-serif;font-weight:500;cursor:pointer;transition:opacity .2s}
+.btn-next:disabled{opacity:.35;cursor:not-allowed}
+.btn-next:not(:disabled):hover{opacity:.85}
+.result{display:none;padding:1rem 0}
+.result.show{display:block}
+.res-center{text-align:center;margin-bottom:1.5rem}
+.res-label{font-size:12px;color:#888780;letter-spacing:.08em;margin-bottom:.3rem}
+.res-type{font-family:'Noto Serif TC',serif;font-size:28px;font-weight:600;color:#1a1a1a;margin-bottom:.75rem}
+.pill{display:inline-block;border-radius:8px;padding:4px 14px;font-size:12px;margin:3px 4px}
+.pill-str{color:#0C447C;background:#E6F1FB}
+.pill-blind{color:#854F0B;background:#FAEEDA}
+.res-desc{font-size:14px;color:#5f5e5a;line-height:1.8;max-width:500px;margin:0 auto 1.5rem;text-align:center}
+.evidence-wrap{background:#f4f2ee;border-radius:12px;padding:1.25rem 1.5rem;max-width:520px;margin:0 auto 2rem}
+.evidence-title{font-size:12px;font-weight:500;color:#888780;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem}
+.ev-item{display:flex;gap:12px;margin-bottom:1rem;padding-bottom:1rem;border-bottom:.5px solid #dddbd4}
+.ev-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.ev-q{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#0C447C}
+.ev-choice{font-size:13px;color:#1a1a1a;margin-bottom:4px;line-height:1.5}
+.ev-insight{font-size:12px;color:#5f5e5a;line-height:1.6;margin-bottom:4px}
+.ev-unit{font-size:11px;color:#0C447C;background:#E6F1FB;border-radius:6px;padding:3px 8px;display:inline-block;margin-top:2px}
+.ev-good{font-size:11px;color:#27500A;background:#EAF3DE;border-radius:6px;padding:3px 8px;display:inline-block;margin-top:2px}
+.radar-wrap{max-width:320px;margin:0 auto 2rem}
+.sgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:420px;margin:0 auto 2rem}
+.sc{background:#f4f2ee;border-radius:8px;padding:.75rem 1rem}
+.sc-label{font-size:11px;color:#888780;margin-bottom:4px}
+.sc-track{height:4px;background:#dddbd4;border-radius:2px;margin-bottom:4px;overflow:hidden}
+.sc-fill{height:100%;border-radius:2px;background:#185FA5}
+.sc-val{font-size:13px;font-weight:500;color:#1a1a1a}
+.cta-wrap{text-align:center;margin:0 auto 2rem;max-width:520px}
+.btn-cta{display:inline-block;background:#185FA5;color:#E6F1FB;border:none;border-radius:8px;padding:.8rem 2rem;font-size:14px;font-family:'Noto Sans TC',sans-serif;font-weight:500;cursor:pointer;text-decoration:none;transition:opacity .2s}
+.btn-cta:hover{opacity:.85}
+.btn-restart{background:transparent;border:.5px solid #b4b2a9;border-radius:8px;padding:.65rem 1.5rem;font-size:14px;font-family:'Noto Sans TC',sans-serif;color:#888780;cursor:pointer;transition:background .2s;display:block;margin:0 auto 1rem}
+.btn-restart:hover{background:#f4f2ee}
+.share{font-size:12px;color:#888780;text-align:center;margin-top:.5rem}
+@media(max-width:480px){.qhdr h1{font-size:22px}.res-type{font-size:24px}.sgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="qw">
+  <div class="qhdr">
+    <div class="badge">英語韌性課 × 敏迪選讀</div>
+    <h1>你是哪種國民外交官？</h1>
+    <p>12 道真實外交情境，測出你的思維邏輯與盲點</p>
+  </div>
+
+  <div id="qbody">
+    <div class="prog-wrap">
+      <div class="prog-meta"><span id="qctr">第 1 題，共 12 題</span><span id="qdim"></span></div>
+      <div class="prog-track"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+    </div>
+    <div class="qcard">
+      <div class="qtag" id="qtag"></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="opts" id="opts"></div>
+    </div>
+    <div class="nav">
+      <span class="hint" id="hint">請選擇一個答案</span>
+      <button class="btn-next" id="bnext" disabled>下一題 →</button>
+    </div>
+  </div>
+
+  <div class="result" id="result">
+    <div class="res-center">
+      <div class="res-label">你的外交人格類型</div>
+      <div class="res-type" id="rtype"></div>
+      <span class="pill pill-str" id="rstr"></span>
+      <span class="pill pill-blind" id="rblind"></span>
+    </div>
+    <div class="res-desc" id="rdesc"></div>
+    <div class="evidence-wrap">
+      <div class="evidence-title">為什麼我們這樣說</div>
+      <div id="evidence"></div>
+    </div>
+    <div class="radar-wrap"><canvas id="radar" role="img" aria-label="六邊形雷達圖顯示六項外交能力得分"></canvas></div>
+    <div class="sgrid" id="sgrid"></div>
+    <div class="cta-wrap">
+      <p style="font-size:13px;color:#5f5e5a;margin-bottom:1rem;line-height:1.7">以上這些盲點，英語韌性課都有對應的單元幫你補起來。</p>
+      <a class="btn-cta" href="https://twbar.cc/FoiC7" target="_blank">了解英語韌性課 →</a>
+    </div>
+    <button class="btn-restart" onclick="restart()">重新測驗</button>
+    <div class="share">把你的類型分享給朋友，看看他們是什麼類型 ✦</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const DIMS=['台灣識別力','國際脈絡力','英語精準力','外交主導力','文化連結力','抗壓應對力'];
+const DMAX=[8,9,8,10,8,8];
+
+const QS=[
+{tag:'台灣識別力',q:'外國朋友問你：「但台灣在法律上到底算不算一個國家？」',opts:[
+{t:'「當然算！我們有自己的總統、護照，這還不夠嗎？」',s:[1,0,0,0,0,-1],
+ fb:{insight:'情緒到位，但說服力還不夠。',unit:'單元一會教你用 in practice / on paper 這組對比，讓對方在30秒內聽懂台灣處境，不需要爭論法律，不需要解釋歷史。',good:false}},
+{t:'「法理上有爭議，但實務上我們完全獨立運作——我們繳稅給自己的政府、選自己的總統、拿自己的護照出國」',s:[3,0,2,0,0,0],
+ fb:{insight:'',unit:'這正是單元一教的核心句式。',good:true}},
+{t:'「這個問題其實很複雜，不同國家有不同立場，很難一概而論」',s:[0,0,0,0,0,1],
+ fb:{insight:'複雜不是逃避的理由。',unit:'單元一會教你，台灣的處境確實複雜，但我們有辦法用一句話說清楚——不讓對方帶著問號離開。',good:false}},
+{t:'「與其討論法律定義，不如問你：你剛才用哪本護照入境的？我的護照是我的政府發的，這就是答案」',s:[1,0,0,3,0,1],
+ fb:{insight:'',unit:'漂亮！這是單元三教的 reframing 技巧的完美示範。',good:true}},
+]},
+
+{tag:'抗壓應對力',q:'有人問你：「你們台灣人每天這麼淡定，是不是根本不覺得中國是威脅？」',opts:[
+{t:'「我們當然很緊張啊，只是已經習慣了，沒辦法」',s:[1,0,0,0,0,-1],
+ fb:{insight:'這個回答關閉了對話，也讓對方覺得台灣人是無奈的。',unit:'單元二會教你用 compartmentalize 描述台灣人的韌性——讓對方感受到的是強大，而不是習慣了也沒辦法。',good:false}},
+{t:'「我從出生就活在這個威脅裡了。但生活還是要過，我們學會了把恐懼放進一個隔間，不讓它主導每一天」',s:[0,0,0,0,2,3],
+ fb:{insight:'',unit:'這正是單元二教的 compartmentalize 精神。',good:true}},
+{t:'「台灣做了很多準備——提高入侵成本、強化民防、能源韌性。我們不是麻木，是有備而來」',s:[2,1,0,1,0,2],
+ fb:{insight:'這個回答很紮實，但還少了一點溫度。',unit:'單元二還會教你加入個人故事，讓對方不只聽到準備清單，而是感受到真實的台灣人。',good:false}},
+{t:'「2022年以前，芬蘭也覺得自己很安全。其實現在全世界都在重新思考安全，台灣只是比較早面對而已」',s:[0,3,0,2,0,1],
+ fb:{insight:'',unit:'這個 reframing 很漂亮！單元三會教你更系統地使用這個技巧，讓你在各種場合都能把格局拉高。',good:true}},
+]},
+
+{tag:'英語精準力',q:'你想表達「台灣法理上有爭議，但實務上完全獨立運作」，哪個英文說法最精準？',opts:[
+{t:'「Taiwan is independent in reality, even though some countries don\'t recognize us officially.」',s:[1,0,1,0,0,0],
+ fb:{insight:'方向對，但精準度還差一點。',unit:'單元一的語言韌性作業會教你，in practice / on paper 比 in reality 更精準——前者是外交語言，後者是日常說法，差一個字，氣勢差很多。',good:false}},
+{t:'「In practice, Taiwan functions as a fully independent country. On paper, our sovereignty remains contested.」',s:[2,0,3,0,0,0],
+ fb:{insight:'',unit:'這是單元一最核心的英語工具，你已經掌握了。',good:true}},
+{t:'「Taiwan is basically a country — we have our own government, military, and currency.」',s:[2,0,1,0,0,0],
+ fb:{insight:'內容對，但 basically 這個字反而削弱了你的立場。',unit:'單元一會教你，用具體事實取代模糊副詞，說服力會強很多——我們不是「基本上」是個國家，我們就是。',good:false}},
+{t:'「Taiwan is independent, but China keeps saying we\'re not, which creates a lot of confusion internationally.」',s:[1,0,1,-1,0,0],
+ fb:{insight:'這樣說，中國變成了你敘事的主角。',unit:'單元三的 agenda setting 會教你，焦點放在台灣自己就好——不需要讓中國進入你的句子。',good:false}},
+]},
+
+{tag:'外交主導力',q:'餐桌上有人說：「台灣遲早要跟中國統一吧，這是歷史的必然。」全桌都看著你。',opts:[
+{t:'「這不是事實——根據民調大多數台灣人支持維持現狀，統一完全不是主流民意」',s:[2,0,0,0,0,1],
+ fb:{insight:'數據是好工具，但你接了對方的框架。',unit:'單元三的 reframing 會教你，先質疑框架本身比直接提數據更有力——「歷史的必然是誰定義的？」先讓對方思考，再提供你的答案。',good:false}},
+{t:'「有趣的說法。我想先問你，「歷史的必然」這個概念，是誰定義的？烏克蘭人聽到這句話，應該也有話說」',s:[0,2,0,3,0,1],
+ fb:{insight:'',unit:'這是單元三 reframing 的教科書示範。',good:true}},
+{t:'「我理解為什麼很多人這樣想，但台灣人其實有自己對未來的想像，和北京說的不太一樣」',s:[1,0,0,0,1,2],
+ fb:{insight:'這個回答有溫度，也有立場。',unit:'單元三還會教你在表達理解之後，如何順勢把框架帶回台灣的敘事，讓對方的注意力從北京轉到台灣人自己。',good:false}},
+{t:'「這是中國的敘事，不是台灣的。我不打算替他們解釋，但我可以告訴你台灣人自己怎麼看」',s:[2,0,0,2,0,2],
+ fb:{insight:'',unit:'很好！這是單元三 agenda setting 的精神——把球還給對方，再用自己的敘事接管對話。',good:true}},
+]},
+
+{tag:'國際脈絡力',q:'有人問：「萬一美國不來救你們，你們怎麼辦？」',opts:[
+{t:'「我們當然希望美國會幫，但我們不能把國防建立在這個假設上，所以我們自己做了很多準備」',s:[1,1,0,0,0,2],
+ fb:{insight:'這個回答務實，但還是在對方的框架裡。',unit:'單元三會教你，防守型的回答之後再多一步——把框架翻轉成「台灣是在幫民主世界擋著」，整個氣勢完全不同。',good:false}},
+{t:'「我沒辦法代替美國回答這個問題。但我可以告訴你我們準備了什麼」',s:[0,0,0,2,0,3],
+ fb:{insight:'',unit:'不接壞球的完美示範。這是單元二和單元三反覆練習的核心技巧。',good:true}},
+{t:'「Supporting Taiwan is not a favor — it\'s also in America\'s interest. Taiwan is the lynchpin of the First Island Chain.」',s:[0,3,2,1,0,0],
+ fb:{insight:'',unit:'漂亮！這是單元三的 reframing 加上單元六的國際脈絡，兩個單元的精華都在這一句。',good:true}},
+{t:'「這個問題的前提有點問題——好像台灣只是在等人家來救。現實是台灣正在第一線幫整個民主世界擋著」',s:[0,2,0,3,0,1],
+ fb:{insight:'',unit:'這是單元三最完整的 reframing 示範——先拆解對方的前提，再建立自己的敘事。',good:true}},
+]},
+
+{tag:'英語精準力',q:'你的外國朋友想了解台灣半導體為什麼這麼強，哪個回答最展現你真的理解這件事？',opts:[
+{t:'「Taiwan makes 90% of the world\'s most advanced chips. Without us, your phone wouldn\'t work.」',s:[0,1,1,0,0,0],
+ fb:{insight:'數字震撼，但說完之後對話就結束了。',unit:'單元六會教你在數字之後，說清楚「為什麼台灣做得到」——那才是讓對方真正服氣的答案。',good:false}},
+{t:'「It\'s not just one company. It\'s an entire ecosystem — thousands of suppliers all within driving distance. You can\'t just copy that.」',s:[0,2,2,1,0,0],
+ fb:{insight:'',unit:'這是單元六最核心的概念——capability vs ability，你可以搬走一間工廠，但搬不走一整個生態系。',good:true}},
+{t:'「TSMC chose to only manufacture chips, not compete with their clients. That built trust with everyone from Apple to NVIDIA.」',s:[0,2,2,0,0,0],
+ fb:{insight:'',unit:'這是單元六教的 TSMC 商業模式解析，你掌握得很好。',good:true}},
+{t:'「Taiwan had no natural resources after the oil crisis, so the government bet everything on technology. It was a Hail Mary — and it worked.」',s:[1,2,2,0,0,0],
+ fb:{insight:'',unit:'這是單元六教的台灣半導體歷史脈絡——用故事說清楚一個奇蹟的來源，比說「我們很強」更令人信服。',good:true}},
+]},
+
+{tag:'台灣識別力',q:'有人問：「台灣人到底算中國人嗎？」',opts:[
+{t:'「不算，台灣人就是台灣人，這沒什麼好討論的」',s:[1,0,0,0,0,-1],
+ fb:{insight:'立場正確，但這樣說容易關閉對話。',unit:'單元四會教你，認同不只是「我是誰」的宣示——用數據描述台灣認同的變化趨勢，讓對方看到這是整個社會的方向，不只是你個人的感受。',good:false}},
+{t:'「每次中國用力抓，認同自己是台灣人的比例就上升一次——1996年飛彈危機、2019年香港，都是這樣」',s:[1,3,0,2,0,0],
+ fb:{insight:'',unit:'這是單元四教的認同趨勢數據的完美運用——讓數字說故事，比直接宣示更有力。',good:true}},
+{t:'「認同是流動的。我家族七代都在台灣，所以我從來沒困惑過。但不同世代、背景的人答案不一樣」',s:[2,0,0,0,2,1],
+ fb:{insight:'個人故事有深度，但少了整體趨勢的支撐。',unit:'單元四會教你結合個人故事和整體數據——讓對方既感受到你，也看到台灣社會的全貌，不只是你一個人的答案。',good:false}},
+{t:'「過去三十年自我認同是台灣人的比例持續上升，現在超過九成的台灣人認同自己是台灣人」',s:[3,1,0,0,0,0],
+ fb:{insight:'數據很紮實，但少了故事的溫度。',unit:'單元四會教你在數據之後加入背後的故事——告訴對方這個數字為什麼會這樣變化，讓數字活起來。',good:false}},
+]},
+
+{tag:'抗壓應對力',q:'外國朋友說：「台灣現在這麼危險，你不考慮移民嗎？」',opts:[
+{t:'「台灣其實沒你想的那麼危險，我們已經和這種威脅共存幾十年了」',s:[1,0,0,0,0,1],
+ fb:{insight:'否定對方的感受，通常讓對方更難接受你說的話。',unit:'單元二會教你用 surreal 描述台灣的日常——讓外國人一秒理解台灣人的生活狀態，比解釋「沒那麼危險」更有力。',good:false}},
+{t:'「2022年以前芬蘭覺得自己很安全，德國以為能源不會是問題。全世界都在重新思考安全，台灣只是比較早」',s:[0,3,0,2,0,1],
+ fb:{insight:'',unit:'這個 reframing 很漂亮！單元三會教你更系統地使用這個技巧，把台灣的處境放進全球脈絡，讓對方從同情變成理解。',good:true}},
+{t:'「Life in Taiwan is honestly a bit surreal——我們可能剛收到共機通知，但下一秒就在討論晚餐要吃什麼。我們選擇不讓恐懼主導生活」',s:[0,0,1,0,1,3],
+ fb:{insight:'',unit:'這是單元二教的核心表達方式——surreal 這個詞，讓外國人一秒理解台灣人的生活狀態，比任何解釋都更直接。',good:true}},
+{t:'「2025年全球安全指數我們排第四，醫療全球第一，幸福指數東亞第一。你說的「危險」，可能跟我住的台灣不太一樣」',s:[2,1,0,1,0,1],
+ fb:{insight:'數據很有力，但少了生活感。',unit:'單元二還會教你在數據之外加入日常畫面——讓對方想像台灣的生活，而不只是看著一組數字。',good:false}},
+]},
+
+{tag:'文化連結力',q:'外國朋友說他對台灣完全不了解，你有五分鐘，怎麼開始？',opts:[
+{t:'「你吃過珍珠奶茶嗎？台灣的食物文化超豐富，夜市、手搖飲、小吃⋯⋯」',s:[0,0,0,0,2,0],
+ fb:{insight:'這是最常見的起手式，但開菜單式的介紹很難讓對方真正記住台灣。',unit:'單元八會教你 Finding the Overlap——先問對方在意什麼，再決定說哪一面的台灣，這樣比直接開菜單更能讓對方真正投入。',good:false}},
+{t:'「先問你——你平常旅行最在意什麼？歷史、食物、自然、還是音樂？我從你有興趣的地方開始說」',s:[0,0,0,2,3,0],
+ fb:{insight:'',unit:'這是單元八最核心的 Finding the Overlap 技巧——讓介紹變成真正的對話，而不是單向輸出。',good:true}},
+{t:'「台灣是南島語系民族的發源地——夏威夷、紐西蘭、菲律賓那些太平洋島國，他們祖先可能都從台灣出發的」',s:[1,1,0,0,2,1],
+ fb:{insight:'這個切入點很驚豔，一下子就讓台灣變得不一樣。',unit:'單元五會教你更多這樣的台灣文化底牌——讓外國人對台灣的認識從驚喜開始，而不是從你以為他們知道的東西開始。',good:false}},
+{t:'「Taiwan is like Japan\'s warmth, New York\'s energy, and street food heaven — all on one island. Plus we\'re at the center of one of the world\'s most critical geopolitical spots.」',s:[0,1,2,1,2,0],
+ fb:{insight:'這個比喻畫面感很強。',unit:'單元八會教你在漂亮的比喻之後，加入你自己的故事，讓對方記住的是你，不只是那句話。',good:false}},
+]},
+
+{tag:'外交主導力',q:'有人說：「台灣這麼小，又沒什麼國際地位，能對世界有什麼貢獻？」',opts:[
+{t:'「台灣的半導體撐起全世界的科技產業，沒有台灣你的手機和電腦都做不出來」',s:[1,2,0,0,0,0],
+ fb:{insight:'這是好切入點，但說完之後對話容易就停在這裡。',unit:'單元六會教你在半導體之外，說清楚更多台灣的貢獻——從隱形冠軍到台商精神，讓對方看到一個立體的台灣，不只是晶片。',good:false}},
+{t:'「我們是全球第12大出口國、美國第4大貿易夥伴，人均GDP超越日本和韓國」',s:[1,2,1,0,0,0],
+ fb:{insight:'數據很震撼，但少了故事支撐。',unit:'單元六會教你在數據之後加入台商故事和隱形冠軍的例子——讓對方真正理解這些數字背後的人和文化。',good:false}},
+{t:'「Taiwan is no longer just a Silicon Shield — we\'re building a Silicon Fortress. We\'re actively drawing in partners and building resilience together.」',s:[0,2,2,2,0,0],
+ fb:{insight:'',unit:'這是單元六教的最重要的思維轉換——從被動防禦的矽盾，到主動建立的矽堡壘。',good:true}},
+{t:'「你知道你用的棒球護具、潛水衣、高爾夫球頭，有超過一半是台灣做的嗎？台灣的貢獻一直都在，只是你沒注意到」',s:[0,2,0,2,2,0],
+ fb:{insight:'',unit:'這是單元六教的隱形冠軍策略——讓對方在日常生活裡發現台灣，比說「我們很強」更令人印象深刻。',good:true}},
+]},
+
+{tag:'文化連結力',q:'外國朋友問你：「你從哪裡來？台灣有什麼特別的？」',opts:[
+{t:'「我來自台北，台灣的首都。有101、夜市、捷運很方便，很現代的城市」',s:[0,0,0,0,1,0],
+ fb:{insight:'這個回答安全，但沒有個性，任何台灣人都可以這樣說。',unit:'單元八會教你，每個台灣人都有一個外國人沒聽過的家鄉故事——那個故事比101更令人難忘，而且只有你說得出來。',good:false}},
+{t:'「我來自⋯⋯（你的家鄉）。讓我告訴你一件你絕對沒想到的事」，然後說一個只有你知道的在地故事',s:[1,0,0,0,3,1],
+ fb:{insight:'',unit:'這是單元八的精髓——從自己出發，用你的家鄉故事讓台灣在對方腦海裡變得具體而獨特。',good:true}},
+{t:'「你喜歡什麼？我可以告訴你一個跟你有關係的台灣故事——不是觀光客版本的那種」',s:[0,0,0,2,2,0],
+ fb:{insight:'',unit:'Finding the Overlap 加上個人故事，這是單元八教的兩個核心技巧的完美結合。',good:true}},
+{t:'「台灣是垂直的微縮世界——早上在海邊衝浪，下午在3000公尺高山喝咖啡。這在全球很罕見」',s:[0,1,1,0,2,0],
+ fb:{insight:'這個畫面感很強，但還是通用版本的台灣介紹。',unit:'單元五會教你更多這樣有畫面感的台灣描述，單元八會再教你在這些描述之外加入你自己的故事，讓對方記住的是你這個人，而不只是那個畫面。',good:false}},
+]},
+
+{tag:'外交主導力',q:'聊了很久的台灣，對方說：「聽起來很有趣，但我對台灣真的不太熟」你怎麼收尾？',opts:[
+{t:'「沒關係，你現在知道的已經比大多數外國人多了！有機會Google一下台灣」',s:[0,0,0,0,1,1],
+ fb:{insight:'這樣結尾，主動權回到了Google，不在你這裡。',unit:'單元三會教你，對話結束前是 agenda setting 的最後機會——用一句有感染力的話收尾，比叫對方自己去查更有力。',good:false}},
+{t:'「那你更要來——Let me show you my version of Taiwan. You won\'t find it on Google or AI.」',s:[0,0,1,2,3,0],
+ fb:{insight:'',unit:'這句話同時做到了單元八的個人故事精神和單元三的 agenda setting——把對方帶進你的台灣，而不是Google的台灣。',good:true}},
+{t:'「If you like Taiwan, help the people around you like us too. That\'s all I ask.」',s:[0,0,1,2,2,0],
+ fb:{insight:'',unit:'這是單元三教的最終版 agenda setting——不只結束一段對話，而是把對方變成台灣的擴音器。',good:true}},
+{t:'「Come visit me in Taiwan — before it\'s too late.」然後笑著看他的反應',s:[0,0,0,1,2,2],
+ fb:{insight:'',unit:'這句話把單元二教的 surreal 心態，變成了最有力的外交邀請——幽默背後是真實的台灣處境，讓對方笑完之後還會想著台灣。',good:true}},
+]},
+];
+
+const TYPES=[
+{name:'🌟 國民外交官',str:'六維均衡，上場即戰力',blind:'準備好了，但真正上場跟練習還有一段距離',
+ desc:'你六個維度都有一定水準，知識、臨場、語言、文化全部到位。但要注意：「準備好」和「真正上場」之間還有一段距離——那段距離，需要真實的對話來填補。',
+ cond:p=>p.every(v=>v>=55)},
+{name:'🧠 知識型戰士',str:'台灣識別力＋國際脈絡力強',blind:'你知道所有答案，但對方感受不到你',
+ desc:'你掌握了紮實的台灣知識和國際視野，遇到艱難問題不會被問倒。但有時候你的回答比較像在上課，而不像在交朋友——對方可能聽完了，但沒有被打動。',
+ cond:p=>{const top=Math.max(p[0]+p[1],p[2]+p[3],p[4]+p[5]);return p[0]+p[1]===top&&p[0]+p[1]>p[4]+p[5]}},
+{name:'⚡ 臨場型高手',str:'外交主導力＋抗壓應對力強',blind:'你很會應對，但你說的台灣是你的，不是他們的',
+ desc:'壞球來了你知道怎麼處理，壓力下你能保持冷靜還能反將一軍。但你有時候太專注在「說贏」，忘了先確認對方真正好奇的是什麼。',
+ cond:p=>{const top=Math.max(p[0]+p[1],p[2]+p[3],p[4]+p[5]);return p[3]+p[5]>=top}},
+{name:'🎤 故事型大使',str:'文化連結力最強',blind:'你讓人喜歡台灣，但遇到硬問題你會不知所措',
+ desc:'你最擅長用故事和文化讓外國人對台灣產生共鳴，你的外交方式是感染，不是說服。但當對方拋出尖銳的政治問題時，你可能會突然不知道怎麼接。',
+ cond:p=>p[4]===Math.max(...p)&&p[4]>p[3]},
+{name:'🌐 分析型觀察者',str:'英語精準力＋國際脈絡力強',blind:'你講得很準，但有點像在上課，不像在交朋友',
+ desc:'你的英語夠精準，國際格局也看得清楚，說出來的東西有深度。但有時候太「分析模式」，對話少了一點溫度——對方點頭，但沒有被觸動。',
+ cond:p=>{const top=Math.max(p[0]+p[1],p[2]+p[3],p[4]+p[5]);return p[1]+p[2]===top&&p[1]+p[2]>p[4]+p[5]}},
+{name:'🌱 有感覺，沒工具',str:'台灣認同感強，出發點正確',blind:'你心裡很清楚自己是台灣人，但還不知道怎麼讓別人也清楚',
+ desc:'你對台灣有真實的情感和認同，這是最重要的起點。但當外國朋友追問時，你可能發現情緒到位，語言卻跟不上——英語韌性課就是為這個 gap 準備的。',
+ cond:()=>true},
+];
+
+function getType(p){for(const t of TYPES)if(t.cond(p))return t;return TYPES[TYPES.length-1]}
+function pct(r){return r.map((v,i)=>Math.round(Math.min(Math.max(v,0)/DMAX[i],1)*100))}
+
+let cur=0,raw=[0,0,0,0,0,0],answered=false,choices=[],chartInst=null;
+
+function render(){
+  const q=QS[cur];
+  document.getElementById('qctr').textContent=`第 ${cur+1} 題，共 ${QS.length} 題`;
+  document.getElementById('qdim').textContent=q.tag;
+  document.getElementById('qtag').textContent=`Q${cur+1}`;
+  document.getElementById('qtext').textContent=q.q;
+  document.getElementById('pfill').style.width=(cur/QS.length*100)+'%';
+  document.getElementById('hint').textContent='請選擇一個答案';
+  const btn=document.getElementById('bnext');
+  btn.disabled=true;
+  btn.textContent=cur<QS.length-1?'下一題 →':'查看結果 →';
+  const opts=document.getElementById('opts');
+  opts.innerHTML='';
+  answered=false;
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';b.textContent=o.t;
+    b.onclick=()=>{
+      if(answered)return;
+      answered=true;
+      choices[cur]=i;
+      o.s.forEach((v,di)=>raw[di]+=v);
+      [...opts.children].forEach(c=>c.classList.remove('sel'));
+      b.classList.add('sel');
+      document.getElementById('bnext').disabled=false;
+      document.getElementById('hint').textContent='已選擇，點擊繼續';
+    };
+    opts.appendChild(b);
+  });
+}
+
+function showResult(){
+  document.getElementById('qbody').style.display='none';
+  document.getElementById('result').classList.add('show');
+  const p=pct(raw);
+  const type=getType(p);
+  document.getElementById('rtype').textContent=type.name;
+  document.getElementById('rstr').textContent='強項：'+type.str;
+  document.getElementById('rblind').textContent='盲點：'+type.blind;
+  document.getElementById('rdesc').textContent=type.desc;
+
+  const evWrap=document.getElementById('evidence');
+  evWrap.innerHTML='';
+  choices.forEach((ci,qi)=>{
+    const fb=QS[qi].opts[ci].fb;
+    if(!fb)return;
+    const d=document.createElement('div');
+    d.className='ev-item';
+    d.innerHTML=`
+      <div class="ev-q">Q${qi+1}</div>
+      <div class="ev-body">
+        ${fb.insight?`<div class="ev-choice">${fb.insight}</div>`:''}
+        <div class="ev-insight">${fb.unit}</div>
+        <span class="${fb.good?'ev-good':'ev-unit'}">${fb.good?'已掌握':'可以更好'}</span>
+      </div>`;
+    evWrap.appendChild(d);
+  });
+
+  if(chartInst){chartInst.destroy();chartInst=null;}
+  chartInst=new Chart(document.getElementById('radar'),{
+    type:'radar',
+    data:{labels:DIMS,datasets:[{data:p,backgroundColor:'rgba(24,95,165,.15)',borderColor:'#185FA5',borderWidth:2,pointBackgroundColor:'#185FA5',pointRadius:4}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{display:false},grid:{color:'rgba(0,0,0,.07)'},angleLines:{color:'rgba(0,0,0,.07)'},pointLabels:{font:{size:12,family:"'Noto Sans TC',sans-serif"},color:'#5f5e5a'}}}}
+  });
+
+  const sg=document.getElementById('sgrid');
+  sg.innerHTML='';
+  DIMS.forEach((d,i)=>{
+    const c=document.createElement('div');c.className='sc';
+    c.innerHTML=`<div class="sc-label">${d}</div><div class="sc-track"><div class="sc-fill" style="width:${p[i]}%"></div></div><div class="sc-val">${p[i]}%</div>`;
+    sg.appendChild(c);
+  });
+}
+
+document.getElementById('bnext').onclick=()=>{
+  cur++;
+  if(cur>=QS.length)showResult();
+  else render();
+};
+
+function restart(){
+  cur=0;raw=[0,0,0,0,0,0];answered=false;choices=[];
+  if(chartInst){chartInst.destroy();chartInst=null;}
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('qbody').style.display='block';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
