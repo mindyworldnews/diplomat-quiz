@@ -27,6 +27,8 @@ body{font-family:'Noto Sans TC',sans-serif;background:#f8f7f4;color:#1a1a1a;min-
 .opt.sel{border-color:#185FA5;background:#E6F1FB;color:#0C447C}
 .nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
 .hint{font-size:12px;color:#888780}
+.btn-prev{background:transparent;border:.5px solid #b4b2a9;border-radius:8px;padding:.65rem 1.2rem;font-size:14px;font-family:'Noto Sans TC',sans-serif;color:#888780;cursor:pointer;transition:background .2s}
+.btn-prev:hover{background:#f4f2ee}
 .btn-next{background:#185FA5;color:#E6F1FB;border:none;border-radius:8px;padding:.65rem 1.5rem;font-size:14px;font-family:'Noto Sans TC',sans-serif;font-weight:500;cursor:pointer;transition:opacity .2s}
 .btn-next:disabled{opacity:.35;cursor:not-allowed}
 .btn-next:not(:disabled):hover{opacity:.85}
@@ -44,6 +46,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:#f8f7f4;color:#1a1a1a;min-
 .ev-item{display:flex;gap:12px;margin-bottom:1rem;padding-bottom:1rem;border-bottom:.5px solid #dddbd4}
 .ev-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
 .ev-q{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#0C447C}
+.ev-selected{font-size:12px;color:#888780;line-height:1.5;margin-bottom:6px;font-style:italic}
 .ev-choice{font-size:13px;color:#1a1a1a;margin-bottom:4px;line-height:1.5}
 .ev-insight{font-size:12px;color:#5f5e5a;line-height:1.6;margin-bottom:4px}
 .ev-unit{font-size:11px;color:#0C447C;background:#E6F1FB;border-radius:6px;padding:3px 8px;display:inline-block;margin-top:2px}
@@ -83,6 +86,7 @@ body{font-family:'Noto Sans TC',sans-serif;background:#f8f7f4;color:#1a1a1a;min-
       <div class="opts" id="opts"></div>
     </div>
     <div class="nav">
+      <button class="btn-prev" id="bprev" style="display:none">← 上一題</button>
       <span class="hint" id="hint">請選擇一個答案</span>
       <button class="btn-next" id="bnext" disabled>下一題 →</button>
     </div>
@@ -96,12 +100,12 @@ body{font-family:'Noto Sans TC',sans-serif;background:#f8f7f4;color:#1a1a1a;min-
       <span class="pill pill-blind" id="rblind"></span>
     </div>
     <div class="res-desc" id="rdesc"></div>
+    <div class="radar-wrap"><canvas id="radar" role="img" aria-label="六邊形雷達圖顯示六項外交能力得分"></canvas></div>
+    <div class="sgrid" id="sgrid"></div>
     <div class="evidence-wrap">
       <div class="evidence-title">為什麼我們這樣說</div>
       <div id="evidence"></div>
     </div>
-    <div class="radar-wrap"><canvas id="radar" role="img" aria-label="六邊形雷達圖顯示六項外交能力得分"></canvas></div>
-    <div class="sgrid" id="sgrid"></div>
     <div class="cta-wrap">
       <p style="font-size:13px;color:#5f5e5a;margin-bottom:1rem;line-height:1.7">以上這些盲點，英語韌性課都有對應的單元幫你補起來。</p>
       <a class="btn-cta" href="https://twbar.cc/FoiC7" target="_blank">了解英語韌性課 →</a>
@@ -274,7 +278,22 @@ const TYPES=[
 function getType(p){for(const t of TYPES)if(t.cond(p))return t;return TYPES[TYPES.length-1]}
 function pct(r){return r.map((v,i)=>Math.round(Math.min(Math.max(v,0)/DMAX[i],1)*100))}
 
-let cur=0,raw=[0,0,0,0,0,0],answered=false,choices=[],chartInst=null;
+// 計算分數（從 choices 重新算，不累積）
+function computeRaw(){
+  const r=[0,0,0,0,0,0];
+  choices.forEach((ci,qi)=>{
+    if(ci!==undefined) QS[qi].opts[ci].s.forEach((v,di)=>r[di]+=v);
+  });
+  return r;
+}
+
+// 將「單元X」加上重點色
+function highlightUnit(text){
+  return text.replace(/單元[一二三四五六七八九十\d]+/g,
+    '<span style="color:#185FA5;font-weight:600">$&</span>');
+}
+
+let cur=0, choices=[], chartInst=null;
 
 function render(){
   const q=QS[cur];
@@ -283,21 +302,27 @@ function render(){
   document.getElementById('qtag').textContent=`Q${cur+1}`;
   document.getElementById('qtext').textContent=q.q;
   document.getElementById('pfill').style.width=(cur/QS.length*100)+'%';
-  document.getElementById('hint').textContent='請選擇一個答案';
+
+  // 上一題按鈕
+  document.getElementById('bprev').style.display=cur>0?'':'none';
+
   const btn=document.getElementById('bnext');
-  btn.disabled=true;
   btn.textContent=cur<QS.length-1?'下一題 →':'查看結果 →';
+
+  const prevChoice=choices[cur];
+  const hasChoice=prevChoice!==undefined;
+  btn.disabled=!hasChoice;
+  document.getElementById('hint').textContent=hasChoice?'已選擇，點擊繼續':'請選擇一個答案';
+
   const opts=document.getElementById('opts');
   opts.innerHTML='';
-  answered=false;
   q.opts.forEach((o,i)=>{
     const b=document.createElement('button');
-    b.className='opt';b.textContent=o.t;
+    b.className='opt';
+    b.textContent=o.t;
+    if(i===prevChoice) b.classList.add('sel');
     b.onclick=()=>{
-      if(answered)return;
-      answered=true;
       choices[cur]=i;
-      o.s.forEach((v,di)=>raw[di]+=v);
       [...opts.children].forEach(c=>c.classList.remove('sel'));
       b.classList.add('sel');
       document.getElementById('bnext').disabled=false;
@@ -310,6 +335,7 @@ function render(){
 function showResult(){
   document.getElementById('qbody').style.display='none';
   document.getElementById('result').classList.add('show');
+  const raw=computeRaw();
   const p=pct(raw);
   const type=getType(p);
   document.getElementById('rtype').textContent=type.name;
@@ -317,23 +343,28 @@ function showResult(){
   document.getElementById('rblind').textContent='盲點：'+type.blind;
   document.getElementById('rdesc').textContent=type.desc;
 
+  // 為什麼我們這樣說
   const evWrap=document.getElementById('evidence');
   evWrap.innerHTML='';
   choices.forEach((ci,qi)=>{
+    if(ci===undefined)return;
     const fb=QS[qi].opts[ci].fb;
     if(!fb)return;
+    const selectedText=QS[qi].opts[ci].t;
     const d=document.createElement('div');
     d.className='ev-item';
     d.innerHTML=`
       <div class="ev-q">Q${qi+1}</div>
       <div class="ev-body">
+        <div class="ev-selected">你選了：${selectedText}</div>
         ${fb.insight?`<div class="ev-choice">${fb.insight}</div>`:''}
-        <div class="ev-insight">${fb.unit}</div>
+        <div class="ev-insight">${highlightUnit(fb.unit)}</div>
         <span class="${fb.good?'ev-good':'ev-unit'}">${fb.good?'已掌握':'可以更好'}</span>
       </div>`;
     evWrap.appendChild(d);
   });
 
+  // 雷達圖
   if(chartInst){chartInst.destroy();chartInst=null;}
   chartInst=new Chart(document.getElementById('radar'),{
     type:'radar',
@@ -341,6 +372,7 @@ function showResult(){
     options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{display:false},grid:{color:'rgba(0,0,0,.07)'},angleLines:{color:'rgba(0,0,0,.07)'},pointLabels:{font:{size:12,family:"'Noto Sans TC',sans-serif"},color:'#5f5e5a'}}}}
   });
 
+  // 分數格
   const sg=document.getElementById('sgrid');
   sg.innerHTML='';
   DIMS.forEach((d,i)=>{
@@ -356,8 +388,13 @@ document.getElementById('bnext').onclick=()=>{
   else render();
 };
 
+document.getElementById('bprev').onclick=()=>{
+  cur--;
+  render();
+};
+
 function restart(){
-  cur=0;raw=[0,0,0,0,0,0];answered=false;choices=[];
+  cur=0;choices=[];
   if(chartInst){chartInst.destroy();chartInst=null;}
   document.getElementById('result').classList.remove('show');
   document.getElementById('qbody').style.display='block';
